@@ -20,6 +20,7 @@ public class DisplayMessageActivity extends Activity {
 	    // Get the message from the intent
 	    Intent intent = getIntent();
 	    String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+	    getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	    // Create the text view
 	    TextView textView = new TextView(this);
