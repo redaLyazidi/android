@@ -8,5 +8,13 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_display_message">My Message</string>
     <string name="hello_world">Hello world!</string>
+    <string name="action_search">Search</string>
 
+    <string name="time_unit_prompt">Choose a times unit</string>
+
+    <string-array name="timeUnitSymbol">
+        <item>s</item>
+        <item>m</item>
+        <item>h</item>
+    </string-array>
 </resources>
