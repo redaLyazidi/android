@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.widget.TextView;
 import com.simple.observer.Observable;
@@ -27,10 +26,16 @@ public class Chronometer extends TextView  implements Observable {
 
     private Set<Observer> observers = new LinkedHashSet<>();
 
-    private long mBase;
+    private long base;
+
+    private long timeStartUnleashed = 0L;
+    private long timeStopUnleashed = 0L;
+    private long spendingTime;
     private boolean mVisible;
-    private boolean mStarted;
-    private boolean mRunning;
+    private boolean started;
+    private boolean initiazed = true;
+    private boolean running;
+    private long begin,end;
     private OnChronometerTickListener mOnChronometerTickListener;
 
     private static final int TICK_WHAT = 2;
@@ -65,7 +70,7 @@ public class Chronometer extends TextView  implements Observable {
 
     @Override
     public void notifyAllObservers() {
-       for (Observer currentObserver : observers) {
+        for (Observer currentObserver : observers) {
             currentObserver.update();
         }
     }
@@ -76,18 +81,22 @@ public class Chronometer extends TextView  implements Observable {
     }
 
     private void init() {
-        mBase = SystemClock.elapsedRealtime();
-        updateText(mBase);
+        if (!started) {
+            base = SystemClock.elapsedRealtime();
+            initiazed = true;
+            updateText(base);
+        }
+
     }
 
     public void setBase(long base) {
-        mBase = base;
+        this.base = base;
         dispatchChronometerTick();
         updateText(SystemClock.elapsedRealtime());
     }
 
     public long getBase() {
-        return mBase;
+        return base;
     }
 
     public void setOnChronometerTickListener(
@@ -100,19 +109,27 @@ public class Chronometer extends TextView  implements Observable {
     }
 
     public void start() {
-        /*Base = SystemClock.elapsedRealtime();*/
-        mStarted = true;
+        if (initiazed) {
+            base = SystemClock.elapsedRealtime();
+        }
+        if (! started) {
+            timeStartUnleashed = SystemClock.elapsedRealtime();
+        }
+        spendingTime  = !initiazed ? timeStartUnleashed - timeStopUnleashed : 0L;
+        started = true;
+        initiazed = false;
         updateRunning();
     }
 
     public void stop() {
-        mStarted = false;
+        started = false;
+        timeStopUnleashed = SystemClock.elapsedRealtime();
         updateRunning();
     }
 
 
     public void setStarted(boolean started) {
-        mStarted = started;
+        this.started = started;
         updateRunning();
     }
 
@@ -135,13 +152,12 @@ public class Chronometer extends TextView  implements Observable {
 
         setText(getTimeAsText(now));
         if (hasToVibrate()) {
-          notifyAllObservers();
+            notifyAllObservers();
         }
     }
 
     public String getTimeAsText(long now) {
-
-        timeElapsed = now - mBase;
+        timeElapsed = now - base - spendingTime;
 
         DecimalFormat df = new DecimalFormat("00");
         int hours = (int)(timeElapsed / (3600 * 1000));
@@ -172,8 +188,8 @@ public class Chronometer extends TextView  implements Observable {
     }
 
     private void updateRunning() {
-        boolean running = mVisible && mStarted;
-        if (running != mRunning) {
+        boolean running = mVisible && started;
+        if (running != this.running) {
             if (running) {
                 updateText(SystemClock.elapsedRealtime());
                 dispatchChronometerTick();
@@ -182,13 +198,13 @@ public class Chronometer extends TextView  implements Observable {
             } else {
                 mHandler.removeMessages(TICK_WHAT);
             }
-            mRunning = running;
+            this.running = running;
         }
     }
 
     private Handler mHandler = new Handler() {
         public void handleMessage(Message m) {
-            if (mRunning) {
+            if (running) {
                 updateText(SystemClock.elapsedRealtime());
                 dispatchChronometerTick();
                 sendMessageDelayed(Message.obtain(this , TICK_WHAT),
@@ -207,18 +223,38 @@ public class Chronometer extends TextView  implements Observable {
         return timeElapsed;
     }
 
-    public int getHours() {
-        return (int)(timeElapsed / (3600 * 1000));
+
+
+    public long getBegin() {
+        return begin;
     }
 
+    public void setBegin(long begin) {
+        this.begin = begin;
+    }
+
+    public long getEnd() {
+        return end;
+    }
+
+    public void setEnd(long end) {
+        this.end = end;
+    }
+
+    public long getMilliseconds() {
+        return end-begin;
+    }
 
     public int getSeconds() {
-        int remaining = (int)(timeElapsed % (3600 * 1000));
+        return (int)(end - begin) / 1000;
+    }
 
-        int minutes = (int)(remaining / (60 * 1000));
-        remaining = (int)(remaining % (60 * 1000));
+    public int getMinutes() {
+        return (int) (end - begin) / 60000;
+    }
 
-        return  (int)(remaining / 1000);
+    public int getHours() {
+        return (int) (end - begin) / 3600000;
     }
 
     public boolean hasToVibrate() {
@@ -226,4 +262,19 @@ public class Chronometer extends TextView  implements Observable {
         return seconds != 0 && seconds % 10 == 0;
     }
 
+    public long getTimeStartUnleashed() {
+        return timeStartUnleashed;
+    }
+
+    public void setTimeStartUnleashed(long timeStartUnleashed) {
+        this.timeStartUnleashed = timeStartUnleashed;
+    }
+
+    public long getTimeStopUnleashed() {
+        return timeStopUnleashed;
+    }
+
+    public void setTimeStopUnleashed(long timeStopUnleashed) {
+        this.timeStopUnleashed = timeStopUnleashed;
+    }
 }
