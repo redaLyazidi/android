@@ -4,29 +4,28 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:orientation="vertical"
-             >
-  <!--  <EditText android:id="@+id/edit_message"
-              android:layout_weight="1"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:hint="@string/edit_message" />
+        >
+    <!--  <EditText android:id="@+id/edit_message"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_message" />
     <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_send"
-            android:onClick="sendMessage"/> -->
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/button_send"
+              android:onClick="sendMessage"/> -->
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center">
-
-    <EditText
-            android:layout_width="67dp"
-            android:layout_height="wrap_content"
-            android:inputType="numberSigned"
-            android:ems="10"
-            android:id="@+id/editText" android:layout_gravity="right"/>
+        <EditText
+                android:layout_width="67dp"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned"
+                android:ems="10"
+                android:id="@+id/editText" android:layout_gravity="right"/>
         <Spinner
                 android:id="@+id/dropDownTimeUnitSymbol"
                 android:layout_width="50dp"
@@ -34,48 +33,61 @@
                 android:entries="@array/timeUnitSymbol"
                 android:prompt="@string/time_unit_prompt"/>
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="times :"
-            android:id="@+id/textView" android:layout_gravity="center_horizontal"/>
-    <EditText
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editText2"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="times :"
+                android:id="@+id/textView" android:layout_gravity="center_horizontal"/>
+        <EditText
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editText2"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-    <Button
-            android:text="INIT"
-            android:id="@+id/init_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+        <Button
+                android:text="INIT"
+                android:id="@+id/init_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <Button
+                android:text="TURN"
+                android:id="@+id/turn_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <Button
+                android:text="START"
+                android:id="@+id/start_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <Button
+                android:text="STOP"
+                android:id="@+id/stop_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <com.api.android.Chronometer
+            android:id="@+id/chronometer"
+            android:format="%s"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    <Button
-            android:text="START"
-            android:id="@+id/start_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    <Button
-            android:text="STOP"
-            android:id="@+id/stop_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-</LinearLayout>
-<com.api.android.Chronometer
-        android:id="@+id/chronometer"
-        android:format="%s"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40sp" android:layout_gravity="center_horizontal"/>
-
+            android:layout_height="wrap_content"
+            android:textSize="40sp" android:layout_gravity="center_horizontal"/>
     <TextView
             android:id="@+id/viewheight"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"    />
+    <LinearLayout
+            android:id="@+id/turns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="200dp"
+            >
+    </LinearLayout>
 </LinearLayout>

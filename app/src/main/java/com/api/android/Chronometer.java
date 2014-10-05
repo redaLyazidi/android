@@ -30,7 +30,7 @@ public class Chronometer extends TextView  implements Observable {
 
     private long timeStartUnleashed = 0L;
     private long timeStopUnleashed = 0L;
-    private long spendingTime;
+    private long oldBase;
     private boolean mVisible;
     private boolean started;
     private boolean initiazed = true;
@@ -80,10 +80,13 @@ public class Chronometer extends TextView  implements Observable {
         void onChronometerTick(Chronometer chronometer);
     }
 
-    private void init() {
+    public void init() {
         if (!started) {
             base = SystemClock.elapsedRealtime();
             initiazed = true;
+            timeStartUnleashed = 0L;
+            timeStopUnleashed = 0L;
+            oldBase = 0L;
             updateText(base);
         }
 
@@ -109,21 +112,18 @@ public class Chronometer extends TextView  implements Observable {
     }
 
     public void start() {
-        if (initiazed) {
-            base = SystemClock.elapsedRealtime();
-        }
         if (! started) {
+            base = SystemClock.elapsedRealtime();
             timeStartUnleashed = SystemClock.elapsedRealtime();
+            started = true;
+            initiazed = false;
+            updateRunning();
         }
-        spendingTime  = !initiazed ? timeStartUnleashed - timeStopUnleashed : 0L;
-        started = true;
-        initiazed = false;
-        updateRunning();
     }
 
     public void stop() {
         started = false;
-        timeStopUnleashed = SystemClock.elapsedRealtime();
+        oldBase += SystemClock.elapsedRealtime() - base;
         updateRunning();
     }
 
@@ -156,8 +156,13 @@ public class Chronometer extends TextView  implements Observable {
         }
     }
 
+    public String getCurrentTimeAsText() {
+        long now = SystemClock.elapsedRealtime();
+        return getTimeAsText(now);
+    }
+
     public String getTimeAsText(long now) {
-        timeElapsed = now - base - spendingTime;
+        timeElapsed = now - base + oldBase;
 
         DecimalFormat df = new DecimalFormat("00");
         int hours = (int)(timeElapsed / (3600 * 1000));
