@@ -84,8 +84,6 @@ public class Chronometer extends TextView  implements Observable {
         if (!started) {
             base = SystemClock.elapsedRealtime();
             initiazed = true;
-            timeStartUnleashed = 0L;
-            timeStopUnleashed = 0L;
             oldBase = 0L;
             updateText(base);
         }

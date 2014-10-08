@@ -102,7 +102,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         switch(v.getId()) {
             case R.id.init_button:
-                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.init();
                 break;
             case R.id.start_button:
 
