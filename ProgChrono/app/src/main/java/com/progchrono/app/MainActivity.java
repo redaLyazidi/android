@@ -12,6 +12,7 @@ import android.widget.*;
 import com.api.android.chronometer.model.ChronometerProgram;
 
 import com.api.android.chronometer.model.Series;
+import com.api.android.custom.view.SeriesLinearLayout;
 import com.api.android.util.ViewUtil;
 import com.simple.observer.Observer;
 import com.api.android.Chronometer;
@@ -32,6 +33,7 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
     private TextView numberUnitTextView;
     private Spinner unitSymbolspinner;
     private TextView timesTextView;
+    private ImageButton firstPlus;
 
 
     private LinearLayout turnsLayout;
@@ -46,14 +48,13 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
         startButton = getAndSetOnClickListener(R.id.start_button);
         stopButton =  getAndSetOnClickListener(R.id.stop_button);
         turnButton =  getAndSetOnClickListener(R.id.turn_button);
+        firstPlus = getImageButtonAndSetOnClickListener(R.id.firstPlus);
         textView = findTextViewById(R.id.viewheight);
         turnsLayout = findLinearLayoutById(R.id.turns);
         unitSymbolspinner = findSpinnerById(R.id.dropDownTimeUnitSymbol);
         numberUnitTextView = findTextViewById(R.id.numberUnit);
         timesTextView = findTextViewById(R.id.timesValue);
         chronometer.addObserver(this);
-        String[] values =  {"s","m","h"};
-        ArrayAdapter<String> arrayAdaptater = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item,values);
         stopButton.setVisibility(View.GONE);
         turnButton.setVisibility(View.GONE);
 
@@ -127,6 +128,11 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
 
             case R.id.turn_button :
                 displayTurn();
+
+            case R.id.firstPlus :
+                addNewSerie(v);
+                break;
+
             default:
                 break;
         }
@@ -173,5 +179,19 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
         Button button = findButtonById(idButton);
         button.setOnClickListener(this);
         return button;
+    }
+
+    private ImageButton getImageButtonAndSetOnClickListener(int idButton) {
+        ImageButton button = findImageButtonById(idButton);
+        button.setOnClickListener(this);
+        return button;
+    }
+
+    public void addNewSerie(View view) {
+        LinearLayout mainLayout = findLinearLayoutById(R.id.mainLayout);
+      /*mainLayout.addView(new SeriesLinearLayout(getApplicationContext()),2);*/
+        LinearLayout v = (LinearLayout) getLayoutInflater().inflate(R.layout.newserielayout, null);
+        mainLayout.addView(v,1);
+
     }
 }

@@ -18,7 +18,7 @@ public class ChronometerProgramTest {
     }
 
     @Test
-    public void should_RetrieveValueToReactFromSeriesInSeconds_return_empty_list() throws Exception {
+    public void should_RetrieveValueToReactFromSeriesInSeconds_return_empty_list() {
         // GIVEN
 
         // WHEN
@@ -29,7 +29,7 @@ public class ChronometerProgramTest {
     }
 
     @Test
-    public void should_RetrieveValueToReactFromSeriesInSeconds_return_same_than_series() throws Exception {
+    public void should_RetrieveValueToReactFromSeriesInSeconds_return_same_than_series() {
         // GIVEN
         final String unitSymbol = "s";
         final int timesAndUnit = 2;
@@ -45,7 +45,7 @@ public class ChronometerProgramTest {
     }
 
     @Test
-    public void should_RetrieveValueToReactFromSeriesInSeconds_return_correct_value() throws Exception {
+    public void should_RetrieveValueToReactFromSeriesInSeconds_return_correct_value() {
         // GIVEN
         final String unitSymbol = "s";
         final int timesAndUnit = 2;
@@ -58,7 +58,6 @@ public class ChronometerProgramTest {
 
         // WHEN
         List<Long> timesToReactFromProgram = chronometerProgram.retrieveValueToReactFromSeriesInSeconds();
-        List<Long> timesToReactFromSeries = series.retrieveTimesToReactInSeconds();
 
         //THEN
         System.out.println(timesToReactFromProgram);

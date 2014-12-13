@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class SimpleTimeUnitTest {
 
     @Test
-    public void should_Convert_Minutes_return_expected_seconds() throws Exception {
+    public void should_Convert_Minutes_return_expected_seconds() {
         // GIVEN
         final long numberMinutes = 1L;
         final long expextedSeconds = 60L;
@@ -20,7 +20,7 @@ public class SimpleTimeUnitTest {
     }
 
     @Test
-    public void should_ToSeconds_Minutes_return_expected_seconds() throws Exception {
+    public void should_ToSeconds_Minutes_return_expected_seconds() {
         // GIVEN
         final long numberMinutes = 1L;
         final long expextedSeconds = 60L;
@@ -31,4 +31,7 @@ public class SimpleTimeUnitTest {
         // THEN
         assertTrue(numbersSeconds == expextedSeconds);
     }
+
+
+
 }

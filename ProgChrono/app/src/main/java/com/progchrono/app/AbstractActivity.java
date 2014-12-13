@@ -26,6 +26,10 @@ public class AbstractActivity extends ActionBarActivity {
         return findViewByIdWithoutCast(id);
     }
 
+    protected ImageButton findImageButtonById(int id) {
+        return findViewByIdWithoutCast(id);
+    }
+
     protected TextView findTextViewById(int id) {
         return findViewByIdWithoutCast(id);
     }

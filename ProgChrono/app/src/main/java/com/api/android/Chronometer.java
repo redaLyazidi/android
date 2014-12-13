@@ -241,6 +241,10 @@ public class Chronometer extends TextView  implements Observable {
         return timeElapsed;
     }
 
+    /**
+    * Get the current seconds (0 to 59)
+    * @return current seconds
+    */
     public int getSeconds() {
         int hours = (int)(timeElapsed / (3600 * 1000));
         int remaining = (int)(timeElapsed % (3600 * 1000));
@@ -251,6 +255,14 @@ public class Chronometer extends TextView  implements Observable {
         int seconds = (int)(remaining / 1000);
         remaining = (int)(remaining % (1000));
         return seconds;
+    }
+
+    /**
+     * Get the total number of seconds (goes over 59)
+     * @return total numbers of seconds
+     */
+    public int getTotalSeconds() {
+        return (int) TimeUnit.MILLISECONDS.toSeconds(timeElapsed);
     }
 
     public int getMinutes() {
@@ -266,14 +278,15 @@ public class Chronometer extends TextView  implements Observable {
     }
 
 
-    public boolean hasToUpdate() {
+    public synchronized boolean hasToUpdate() {
         if (timeElapsed == 0L) {
             return false;
         }
-        int seconds = getSeconds();
+        int seconds = getTotalSeconds();
         final List<Long> timesToReact = chronometerProgram.retrieveValueToReactFromSeriesInSeconds();
         long secondsLong = (long) seconds;
         Log.d(timesToReact.toString(),"value to react");
+        Log.d("current seconds", String.valueOf(seconds));
         return timesToReact.contains(secondsLong);
     }
 
