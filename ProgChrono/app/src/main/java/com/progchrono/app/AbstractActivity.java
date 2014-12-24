@@ -2,6 +2,7 @@ package com.progchrono.app;
 
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import com.api.android.Chronometer;
 
@@ -15,6 +16,14 @@ public class AbstractActivity extends ActionBarActivity {
     }
 
     protected LinearLayout findLinearLayoutById(int id) {
+        return findViewByIdWithoutCast(id);
+    }
+
+    protected GridLayout findGridLayoutById(int id) {
+        return findViewByIdWithoutCast(id);
+    }
+
+    protected ViewGroup findViewGroupById(int id) {
         return findViewByIdWithoutCast(id);
     }
 
@@ -39,6 +48,10 @@ public class AbstractActivity extends ActionBarActivity {
     }
 
     protected Spinner findSpinnerById(int id) {
+        return findViewByIdWithoutCast(id);
+    }
+
+    protected ScrollView findSrollViewById(int id) {
         return findViewByIdWithoutCast(id);
     }
 

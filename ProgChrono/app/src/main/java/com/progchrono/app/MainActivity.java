@@ -5,14 +5,11 @@ import static com.api.android.util.StringsUtil.isReallyNullOrEmpty;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.util.Log;
+import android.view.*;
 import android.widget.*;
-import com.api.android.chronometer.model.ChronometerProgram;
 
 import com.api.android.chronometer.model.Series;
-import com.api.android.custom.view.SeriesLinearLayout;
 import com.api.android.util.ViewUtil;
 import com.simple.observer.Observer;
 import com.api.android.Chronometer;
@@ -21,6 +18,12 @@ import com.api.android.Chronometer;
 public class MainActivity extends AbstractActivity implements View.OnClickListener, Observer {
 
     public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+
+    private static final int NUMBER_UNIT_INDEX = 0;
+
+    private static final int SPINNER_INDEX = 1;
+
+    private static final int TIMES_INDEX = 3;
 
     private Chronometer chronometer;
 
@@ -34,6 +37,9 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
     private Spinner unitSymbolspinner;
     private TextView timesTextView;
     private ImageButton firstPlus;
+    private ScrollView serieScrollView;
+    private LinearLayout seriesMainLayout;
+
 
 
     private LinearLayout turnsLayout;
@@ -57,7 +63,8 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
         chronometer.addObserver(this);
         stopButton.setVisibility(View.GONE);
         turnButton.setVisibility(View.GONE);
-
+        serieScrollView = findSrollViewById(R.id.seriescrollview);
+        seriesMainLayout = findLinearLayoutById(R.id.seriesmainlayout);
 
     }
 
@@ -108,13 +115,15 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
-        switch(v.getId()) {
+        final int viewId = v.getId();
+        switch(viewId) {
             case R.id.init_button:
                 chronometer.init();
                 break;
             case R.id.start_button:
 
                 chronometer.start();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 ViewUtil.switchView(startButton, stopButton);
                 ViewUtil.switchView(initButton, turnButton);
                 setProgramToChronometer();
@@ -122,12 +131,14 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
                 break;
             case R.id.stop_button:
                 chronometer.stop();
+                getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 ViewUtil.switchView(stopButton,startButton);
                 ViewUtil.switchView(turnButton, initButton);
                 break;
 
             case R.id.turn_button :
                 displayTurn();
+                break;
 
             case R.id.firstPlus :
                 addNewSerie(v);
@@ -139,7 +150,45 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
 
     }
 
+    private Series createSeriesFromView(TextView numberUnitTextView, Spinner unitSymbolspinner, TextView timesTextView) {
+        Series series = null;
+        final CharSequence numberUnitText = numberUnitTextView.getText();
+        final String numberUnit = numberUnitText != null ? numberUnitText.toString() : "";
+        final String unitSymbol = unitSymbolspinner.getSelectedItem().toString();
+        final CharSequence timesText = timesTextView.getText();
+        final String times = timesText != null ? timesText.toString() : "";
+        final boolean withProgram = !isReallyNullOrEmpty(numberUnit) && !isReallyNullOrEmpty(unitSymbol) && !isReallyNullOrEmpty(times);
+
+        if (withProgram) {
+           series = new Series();
+           series.setNumberUnit(numberUnit);
+           series.setUnitSymbol(unitSymbol);
+           series.setTimes(times);
+         }
+        return series;
+
+    }
+
     private void setProgramToChronometer() {
+        /*Series currentSeries = createSeriesFromView(numberUnitTextView,unitSymbolspinner,timesTextView);*/
+        Series currentSeries;
+        final int numberSeries = seriesMainLayout.getChildCount();
+        for (int i = 0; i < numberSeries; ++i) {
+            LinearLayout currentLayout = (LinearLayout) seriesMainLayout.getChildAt(i);
+            TextView currentNumberUnit = (TextView) currentLayout.getChildAt(NUMBER_UNIT_INDEX);
+            Spinner currentSpinner = (Spinner) currentLayout.getChildAt(SPINNER_INDEX);
+            TextView currentTimes = (TextView) currentLayout.getChildAt(TIMES_INDEX);
+            currentSeries = createSeriesFromView(currentNumberUnit,currentSpinner,currentTimes);
+            if (currentSeries != null) {
+                chronometer.getChronometerProgram().addSeries(currentSeries);
+                chronometer.setCanUpdate(true);
+            }
+
+        }
+
+    }
+
+   /* private void setProgramToChronometer() {
         final CharSequence numberUnitText = numberUnitTextView.getText();
         final String numberUnit = numberUnitText != null ? numberUnitText.toString() : "";
         final String unitSymbol = unitSymbolspinner.getSelectedItem().toString();
@@ -154,10 +203,11 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
             series.setTimes(times);
             chronometer.getChronometerProgram().addSeries(series);
         }
-    }
+    }*/
 
     @Override
     public void update() {
+        Log.d("vibrate","");
         vibrate(500);
     }
 
@@ -188,10 +238,21 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
     }
 
     public void addNewSerie(View view) {
-        LinearLayout mainLayout = findLinearLayoutById(R.id.mainLayout);
+        ViewGroup serieMainLayout = findViewGroupById(R.id.seriesandchronolayout);
       /*mainLayout.addView(new SeriesLinearLayout(getApplicationContext()),2);*/
         LinearLayout v = (LinearLayout) getLayoutInflater().inflate(R.layout.newserielayout, null);
-        mainLayout.addView(v,1);
+        serieMainLayout.addView(v,1);
 
     }
+
+    public void removeSerie(View view) {
+       ImageButton minusButton = (ImageButton) view;
+       LinearLayout currentLayout = (LinearLayout) view.getParent();
+       currentLayout.removeAllViews();
+       ((ViewGroup) currentLayout.getParent()).removeView(currentLayout);
+        currentLayout = null;
+
+    }
+
+
 }

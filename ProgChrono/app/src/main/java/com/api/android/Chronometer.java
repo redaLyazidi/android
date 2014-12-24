@@ -132,6 +132,7 @@ public class Chronometer extends TextView  implements Observable {
     public void stop() {
         started = false;
         oldBase += SystemClock.elapsedRealtime() - base;
+        chronometerProgram.getAllSeries().clear();
         updateRunning();
     }
 
@@ -285,8 +286,8 @@ public class Chronometer extends TextView  implements Observable {
         int seconds = getTotalSeconds();
         final List<Long> timesToReact = chronometerProgram.retrieveValueToReactFromSeriesInSeconds();
         long secondsLong = (long) seconds;
-        Log.d(timesToReact.toString(),"value to react");
-        Log.d("current seconds", String.valueOf(seconds));
+        /*Log.d(timesToReact.toString(),"value to react");
+        Log.d("current seconds", String.valueOf(seconds));*/
         return timesToReact.contains(secondsLong);
     }
 
@@ -317,5 +318,9 @@ public class Chronometer extends TextView  implements Observable {
     public List<Long> getProgram() {
         List<Long> program = new LinkedList<>();
         return program;
+    }
+
+    public boolean isInitialized() {
+        return initiazed;
     }
 }
