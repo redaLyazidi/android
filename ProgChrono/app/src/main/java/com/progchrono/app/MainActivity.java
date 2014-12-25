@@ -5,7 +5,6 @@ import static com.api.android.util.StringsUtil.isReallyNullOrEmpty;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -38,6 +37,7 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
     private TextView timesTextView;
     private ImageButton firstPlus;
     private ScrollView serieScrollView;
+    private GridLayout seriesAndChronoLayout;
     private LinearLayout seriesMainLayout;
 
 
@@ -64,6 +64,7 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
         stopButton.setVisibility(View.GONE);
         turnButton.setVisibility(View.GONE);
         serieScrollView = findSrollViewById(R.id.seriescrollview);
+        seriesAndChronoLayout = findGridLayoutById(R.id.seriesandchronolayout);
         seriesMainLayout = findLinearLayoutById(R.id.seriesmainlayout);
 
     }
@@ -207,7 +208,6 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
 
     @Override
     public void update() {
-        Log.d("vibrate","");
         vibrate(500);
     }
 
@@ -238,10 +238,10 @@ public class MainActivity extends AbstractActivity implements View.OnClickListen
     }
 
     public void addNewSerie(View view) {
-        ViewGroup serieMainLayout = findViewGroupById(R.id.seriesandchronolayout);
+        /*ViewGroup serieMainLayout = findViewGroupById(R.id.seriesandchronolayout);*/
       /*mainLayout.addView(new SeriesLinearLayout(getApplicationContext()),2);*/
         LinearLayout v = (LinearLayout) getLayoutInflater().inflate(R.layout.newserielayout, null);
-        serieMainLayout.addView(v,1);
+        seriesMainLayout.addView(v,1);
 
     }
 

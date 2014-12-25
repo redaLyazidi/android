@@ -286,8 +286,8 @@ public class Chronometer extends TextView  implements Observable {
         int seconds = getTotalSeconds();
         final List<Long> timesToReact = chronometerProgram.retrieveValueToReactFromSeriesInSeconds();
         long secondsLong = (long) seconds;
-        /*Log.d(timesToReact.toString(),"value to react");
-        Log.d("current seconds", String.valueOf(seconds));*/
+        Log.d(timesToReact.toString()," value to react");
+        Log.d("current seconds", String.valueOf(seconds));
         return timesToReact.contains(secondsLong);
     }
 
